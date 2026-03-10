@@ -14,13 +14,14 @@ class LoadTherapies:
 
     def load_diseases(self):
         data = {
-            'mm': 'Multiple Myeloma',
-            'fl': 'Follicular Lymphoma',
-            'bc': 'Breast Cancer'
+            'MM': 'Multiple Myeloma',
+            'FL': 'Follicular Lymphoma',
+            'BC': 'Breast Cancer'
         }
 
-        for code in data.keys():
-            Disease.objects.update_or_create(code=code, defaults={'title': data[code]})
+        for code, title in data.items():
+            # Look up by title (the unique constraint), always update code
+            Disease.objects.get_or_create(code=code, defaults={'title': title})
 
     def load_therapy_rounds(self):
         data = {

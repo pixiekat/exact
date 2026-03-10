@@ -12,13 +12,14 @@ class LoadSupportiveTherapies:
 
     def load_diseases(self):
         data = {
-            'mm': 'Multiple Myeloma',
-            'fl': 'Follicular Lymphoma',
-            'bc': 'Breast Cancer'
+            'MM': 'Multiple Myeloma',
+            'FL': 'Follicular Lymphoma',
+            'BC': 'Breast Cancer'
         }
 
-        for code in data.keys():
-            Disease.objects.update_or_create(code=code, defaults={'title': data[code]})
+        for code, title in data.items():
+            # Look up by title (the unique constraint), always update code
+            Disease.objects.get_or_create(code=code, defaults={'title': title})
 
     def load_therapy_rounds(self):
         data = {
@@ -71,15 +72,15 @@ class LoadSupportiveTherapies:
         for therapy in Therapy.objects.iterator():
             if therapy.code in supportive_mm:
                 item, _ = DiseaseRoundTherapyConnection.objects.get_or_create(
-                    disease=diseases['mm'], round=supportive_therapy, therapy=therapy)
+                    disease=diseases['MM'], round=supportive_therapy, therapy=therapy)
                 items.append(item.id)
             if therapy.code in supportive_fl:
                 item, _ = DiseaseRoundTherapyConnection.objects.get_or_create(
-                    disease=diseases['fl'], round=supportive_therapy, therapy=therapy)
+                    disease=diseases['FL'], round=supportive_therapy, therapy=therapy)
                 items.append(item.id)
             if therapy.code in supportive_bc:
                 item, _ = DiseaseRoundTherapyConnection.objects.get_or_create(
-                    disease=diseases['bc'], round=supportive_therapy, therapy=therapy)
+                    disease=diseases['BC'], round=supportive_therapy, therapy=therapy)
                 items.append(item.id)
 
         # cleanup

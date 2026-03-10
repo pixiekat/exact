@@ -16,21 +16,22 @@ class LoadPlannedTherapyOptions:
 
     def load_diseases(self):
         data = {
-            'mm': 'Multiple Myeloma',
-            'fl': 'Follicular Lymphoma',
-            'bc': 'Breast Cancer'
+            'MM': 'Multiple Myeloma',
+            'FL': 'Follicular Lymphoma',
+            'BC': 'Breast Cancer',
         }
 
-        for code in data.keys():
-            Disease.objects.update_or_create(code=code, defaults={'title': data[code]})
+        for code, title in data.items():
+            # Look up by title (the unique constraint), always update code
+            Disease.objects.get_or_create(code=code, defaults={'title': title})
 
     def get_data(self):
         diseases = {x.code: x for x in Disease.objects.all()}
         out = {}
         chunks = [
-            [self.mm_data(), diseases['mm']],
-            [self.fl_data(), diseases['fl']],
-            [self.bc_data(), diseases['bc']]]
+            [self.mm_data(), diseases['MM']],
+            [self.fl_data(), diseases['FL']],
+            [self.bc_data(), diseases['BC']]]
         for chunk in chunks:
             codes = chunk[0]
             disease = chunk[1]

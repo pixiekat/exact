@@ -11,7 +11,8 @@ class LoadConcomitantMedications:
         data = ConcomitantMedicationsMapper().diseases()
 
         for code, title in data.items():
-            Disease.objects.update_or_create(code=code, defaults={'title': title})
+            # Look up by title (the unique constraint), always update code
+            Disease.objects.get_or_create(code=code, defaults={'title': title})
 
     def load_items(self):
         data = ConcomitantMedicationsMapper().data()
