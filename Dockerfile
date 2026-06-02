@@ -1,6 +1,6 @@
 FROM python:3.12-slim
 
-ENV PYTHONUNBUFFERED=1 PYTHONHASHSEED=random PYTHONDONTWRITEBYTECODE=1 PORT=8000
+ENV PYTHONUNBUFFERED=1 PYTHONHASHSEED=random PYTHONDONTWRITEBYTECODE=1 PORT=8080
 
 RUN apt-get update \
     && apt-get -y --no-install-recommends install \
@@ -28,7 +28,7 @@ COPY . /app
 
 RUN python manage.py collectstatic --no-input
 
-EXPOSE 8000
+EXPOSE 8080
 
 # Fixing since it was broken at /app
 CMD ["/docker/entrypoint.sh"]
